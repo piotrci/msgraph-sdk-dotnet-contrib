@@ -77,10 +77,10 @@ namespace Graph.Community
 				response.Headers.Location = new Uri(this.redirectURL);
 			}
 
-			if ((int)statusCode == 429)
+			if ((int)statusCode == 429 || statusCode == HttpStatusCode.ServiceUnavailable)
 			{
-				// throttling case has to have a timeout scenario
-				response.Headers.Add("retry-after", "300");
+				// throttling (429) or service unavailable (503) cases should have a retry-after value
+				response.Headers.Add("retry-after", testingHandlerOption.RetryAfter.TotalSeconds.ToString("F0"));
 			}
 
 			// response body gets created as empty for passed cases

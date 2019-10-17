@@ -9,6 +9,7 @@ using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Text;
 
 namespace Graph.Community
@@ -20,12 +21,15 @@ namespace Graph.Community
 		public Error ErrorResource { get; set; }
         public TimeSpan RetryAfter { get; set; }
 
+        private const int defaultRetryAfterSeconds = 5;
+
 		/// <summary>
 		/// Constructs a new <see cref="TestingHandlerOption"/> with <see cref="TestingStrategy"/> set to <see cref="TestingStrategy.Random"/>
 		/// </summary>
 		public TestingHandlerOption()
 		{
 			this.TestingStrategy = TestingStrategy.Random;
+            this.RetryAfter = TimeSpan.FromSeconds(defaultRetryAfterSeconds);
 		}
 
 		/// <summary>
@@ -38,7 +42,7 @@ namespace Graph.Community
             this.TestingStrategy = TestingStrategy.Manual;
             this.StatusCode = statusCode;
             this.ErrorResource = errorResource;
-            this.RetryAfter = TimeSpan.FromSeconds(5);
+            this.RetryAfter = TimeSpan.FromSeconds(defaultRetryAfterSeconds);
         }
 
         /// <summary>
