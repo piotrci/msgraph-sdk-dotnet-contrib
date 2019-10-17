@@ -18,6 +18,7 @@ namespace Graph.Community
 		public TestingStrategy TestingStrategy { get; set; }
 		public HttpStatusCode? StatusCode { get; set; }
 		public Error ErrorResource { get; set; }
+        public TimeSpan RetryAfter { get; set; }
 
 		/// <summary>
 		/// Constructs a new <see cref="TestingHandlerOption"/> with <see cref="TestingStrategy"/> set to <see cref="TestingStrategy.Random"/>
@@ -34,9 +35,24 @@ namespace Graph.Community
 		/// <param name="errorResource">The <see cref="Error"/> resource to return in the response body</param>
 		public TestingHandlerOption(HttpStatusCode statusCode, Error errorResource = null)
 		{
-			this.TestingStrategy = TestingStrategy.Manual;
-			this.StatusCode = statusCode;
-			this.ErrorResource = errorResource;
-		}
-	}
+            this.TestingStrategy = TestingStrategy.Manual;
+            this.StatusCode = statusCode;
+            this.ErrorResource = errorResource;
+            this.RetryAfter = TimeSpan.FromSeconds(5);
+        }
+
+        /// <summary>
+		/// Constructs a new <see cref="TestingHandlerOption"/> with <see cref="TestingStrategy"/> set to <see cref="TestingStrategy.Manual"/>
+		/// </summary>
+		/// <param name="statusCode">The <see cref="HttpStatusCode"/> to set on the response</param>
+        /// <param name="retryAfter">The retry after time to use for error responses that include the retry-after header</param>
+		/// <param name="errorResource">The <see cref="Error"/> resource to return in the response body</param>
+		public TestingHandlerOption(HttpStatusCode statusCode, TimeSpan retryAfter, Error errorResource = null)
+        {
+            this.TestingStrategy = TestingStrategy.Manual;
+            this.StatusCode = statusCode;
+            this.ErrorResource = errorResource;
+            this.RetryAfter = retryAfter;
+        }
+    }
 }
